@@ -214,7 +214,7 @@ const updatedetails = async function (req, res) {
         }
         if (isValid(releasedAt)) {
                 if (!moment(releasedAt, "YYYY-MM-DD", true).isValid())
-                    return res.status(400).send({status: false,message: "Enter a valid date with the format (YYYY-MM-DD)."});
+                    return res.status(400).send({status: false,message: "Enter a valid date with the format (YYYY-MM-DD)."});
             obj.releasedAt = releasedAt.trim()    
         }
         if (isValid(ISBN)) {
