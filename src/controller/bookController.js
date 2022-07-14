@@ -37,10 +37,32 @@ let uploadFile= async ( file) =>{
 
 
 
+//AWS configaration
+
+const bookcover=async (req,res)=>{
+    try{
+        let files=req.files
+
+        if (!(files&&files.length)) {
+            return res.status(400).send({ status: false, message: " Please Provide The Profile Image" });}
+
+        const uploadedBookImage = await uploadFile(files[0])
+
+        //data.bookImage=uploadedBookImage
+        return res.status(201).send({ status: true, data: uploadedBookImage})
+
+    }catch(err){
+        return res.status(500).send({ status: false, message:err.message })
+
+    }
+}
+
+
 // ============================================createBook===================================================
 const createbook = async function (req, res) {
     try {
         let data = req.body
+        console.log(req.files)
         let { title, excerpt, userId, ISBN, category, subcategory, releasedAt } = data
         if (!isValidbody(data)) {
             return res.status(400).send({ status: false, message: "body can't be empty" })
@@ -111,14 +133,14 @@ const createbook = async function (req, res) {
                 });}
         } else releasedAt = new Date()
 // ==========================================Profile Image===============================================================
-        let files=req.files
+        // let files=req.files
 
-        if (!(files&&files.length)) {
-            return res.status(400).send({ status: false, message: " Please Provide The Profile Image" });}
+        // if (!(files&&files.length)) {
+        //     return res.status(400).send({ status: false, message: " Please Provide The Profile Image" });}
 
-        const uploadedBookImage = await uploadFile(files[0])
+        // const uploadedBookImage = await uploadFile(files[0])
 
-        data.bookImage=uploadedBookImage
+        // data.bookImage=uploadedBookImage
 // ==============================================================================================================================
         
         let obj = { title, excerpt, userId, ISBN, category, subcategory, releasedAt }
@@ -305,4 +327,4 @@ const deletebook = async function (req, res) {
 
 
 
-module.exports = { createbook, getBooks, getBooksById, updatedetails, deletebook }
+module.exports = { createbook, getBooks, getBooksById, updatedetails, deletebook,bookcover }
