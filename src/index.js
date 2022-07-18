@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const express = require('express');
 const bodyParser = require('body-parser');
-// const route = require('./route/route');
+const route = require('./route/route');
 
 
 const app = express();
@@ -19,7 +19,7 @@ mongoose.connect('mongodb+srv://subhamsidharth:2NoDZjzEUgRaFunQ@cluster0.f3bng.m
   console.log(err)
 })
 
-// app.use('/', route);
+ app.use('/', route);
 
 app.listen(process.env.PORT || 3000, function(){
   console.log('Your app is running at port', process.env.PORT || 3000);
