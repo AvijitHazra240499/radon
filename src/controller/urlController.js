@@ -7,11 +7,11 @@ const { promisify } = require("util");
 
 //Connect to redis
 const redisClient = redis.createClient(
-    16606,  //port
-    "redis-16606.c212.ap-south-1-1.ec2.cloud.redislabs.com", //host
+    16606,  //port 
+    "redis-16606.c212.ap-south-1-1.ec2.cloud.redislabs.com", //host 
     { no_ready_check: true }
 );
-redisClient.auth("fe9u0KwiUsxNoHQXetJVocl7goThvLPG", function (err) { //pw
+redisClient.auth("fe9u0KwiUsxNoHQXetJVocl7goThvLPG", function (err) { //pw 
     if (err) throw err;
 });
 
@@ -21,7 +21,7 @@ redisClient.on("connect", async function () {
 
 
 //1. connect to the server
-//2. use the commands :
+//2. use the commands : 
 
 //Connection setup for redis
 
@@ -62,11 +62,15 @@ module.exports.createUrl = async function (req, res) {
 
         let uniqueUrl = await urlModel.findOne({ longUrl }).select({ _id: 0, __v: 0, createdAt: 0, updatedAt: 0 })
         if (uniqueUrl) {
-            await SET_ASYNC(`${req.body.longUrl}`, JSON.stringify(uniqueUrl));//---------------------------
+            await SET_ASYNC(`${req.body.longUrl}`, JSON.stringify(uniqueUrl), "EX", 60*2);//---------------------------
             return res.status(200).send({ status: true, message: "This is already created ♻✅", data: uniqueUrl })
         }
 
         const urlCode = shortid.generate().toLowerCase()
+        //if the Urlcode is already existm( rare purpouse)
+        // urlCode="veb0rw5vu"
+        const alreadyExistCode = await urlModel.findOne({ urlCode})
+        if (alreadyExistCode) return res.status(400).send({ status: false, message: "It seems You Have To Hit The Api Again  ⚠" })
         const shortUrl = "http://localhost:3000/" + urlCode
 
       
@@ -77,8 +81,8 @@ module.exports.createUrl = async function (req, res) {
             urlCode: urlCode
         }
 
-        let urlCreated = await urlModel.create(Data) //.select({_id:0,_v:0,createdAt:0,updatedAt:0})
-        await SET_ASYNC(`${longUrl}`, JSON.stringify(Data))
+        let urlCreated = await urlModel.create(Data)
+        await SET_ASYNC(`${longUrl}`, JSON.stringify(Data), "EX", 60 * 2)
         return res.status(201).send({ status: true, message: "Success ✔🟢", data: Data });
 
     } catch (err) {
@@ -87,21 +91,22 @@ module.exports.createUrl = async function (req, res) {
     }
 }
 
-//********************************getApi ***********************************************************************
+//********************************getApi ***********************************************************************//
 
 
 
 module.exports.redirectUrl = async function (req, res) {
     try {
-        let urlCode = req.params;
+        let urlCode = req.params.urlCode;
         let urlcache = await GET_ASYNC(`${urlCode}`);
         if (urlcache) {
-            return res.status(302).redirect(JSON.parse(urlcache));
+            
+            return res.status(302).redirect(urlcache);
         }
-
-        const findUrlCode = await urlModel.findOne(urlCode).select({ createdAt: 0, updatedAt: 0, __v: 0, _id: 0 })
-         if (!findUrlCode) return res.status(400).send({ status: false, message: "url code not matched ❗🚫" })
-        await SET_ASYNC(`${urlCode}`, JSON.stringify(findUrlCode.longUrl));
+        const findUrlCode = await urlModel.findOne({ urlCode }).select({ createdAt: 0, updatedAt: 0, __v: 0, _id: 0 })
+       
+        if (!findUrlCode) return res.status(404).send({ status: false, message: "url code not Found ❗🚫" })
+        await SET_ASYNC(`${urlCode}`, findUrlCode.longUrl);
         return res.status(302).redirect(findUrlCode.longUrl)
 
     } catch (error) {
@@ -109,4 +114,4 @@ module.exports.redirectUrl = async function (req, res) {
         return res.status(500).send({ status: false, error: error.message });
     }
 };
-// module.exports = (createUrl)
+// module.exports = {createUrl,redirectUrl}
