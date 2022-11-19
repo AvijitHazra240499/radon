@@ -7,11 +7,11 @@ const { promisify } = require("util");
 
 //Connect to redis
 const redisClient = redis.createClient(
-    16606,  //port 
-    "redis-16606.c212.ap-south-1-1.ec2.cloud.redislabs.com", //host 
+    12971,  //port 
+    "redis-12971.c13.us-east-1-3.ec2.cloud.redislabs.com", //host 
     { no_ready_check: true }
 );
-redisClient.auth("fe9u0KwiUsxNoHQXetJVocl7goThvLPG", function (err) { //pw 
+redisClient.auth("GthZKsGR1SVSQjx3DLNncQ33u60aWbtn", function (err) { //pw 
     if (err) throw err;
 });
 
