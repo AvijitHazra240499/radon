@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/Subhamsidharth/Scalable-URL-Shortner-Project-Requirement#readme",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.18.1",
     "mongoose": "^6.4.4",
     "redis": "^3.1.2",
@@ -26,6 +27,5 @@
     "url": "^0.11.0",
     "valid": "^0.1.1",
     "valid-url": "^1.0.9"
-   
   }
 }
