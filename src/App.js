@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import Axios  from 'axios'
+import  "./App.css"
 
 const App = () => {
     const [value,updateValue]=useState("")
@@ -30,11 +31,6 @@ const App = () => {
     </div>
   )
 }
-
-
-
-
-
 
 
 export default App
