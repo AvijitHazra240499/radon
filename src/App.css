@@ -1,4 +1,22 @@
- div{
+ .container{
+    display: flex;
+    flex-direction: column;
+    justify-content:center;
+    align-items: center;
     border-style: solid;
-    border-color: red green blue yellow;
+    border-color: rgb(0, 255, 136);
+    outline-style: solid;  
+      width: 238px;
+      padding: 50px;
+      margin: 20px;
+      
+
+ }
+ button{
+    border-style: solid;
+    border-color: rgb(255, 0, 0);
+ }
+ .container >input{
+    border-color: rgb(15, 33, 136);
+    outline-style: solid;  
  }

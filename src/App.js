@@ -7,6 +7,7 @@ const App = () => {
     const [visible,setVisible]=useState("")
 
     async function urlshort(){
+      setVisible(null)
         const host="https://url-shortner-y5ky.onrender.com"
       const Longurl=await Axios.post(`${host}/url/shorten`, {
        longUrl:value
@@ -16,14 +17,15 @@ const App = () => {
       setVisible(Shorturl)
     }
   return (
-    <div>
+    <div className='container'>
       <input onChange={(e)=>{
        updateValue(e.target.value)
       }}/>
+      { visible===null?"...wait Please":
       <button onClick={()=>{urlshort()}}>
         Submit
       </button>
-      
+      }
        <a href={visible}>
         <span>{visible}</span>
       </a>
