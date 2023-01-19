@@ -57,7 +57,7 @@ module.exports.createUrl = async function (req, res) {
         let cachedlinkdata = await GET_ASYNC(`${req.body.longUrl}`) //-------------------------
         if (cachedlinkdata) {
             let change = JSON.parse(cachedlinkdata)
-            return res.status(200).send({ status: true, msg: "data found in Redis ♻✔🟢", redisdata: change })
+            return res.status(200).send({ status: true, msg: "data found in Redis ♻✔🟢", data: change })
         }
 
         let uniqueUrl = await urlModel.findOne({ longUrl }).select({ _id: 0, __v: 0, createdAt: 0, updatedAt: 0 })
